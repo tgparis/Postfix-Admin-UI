@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Search — MIE Postfix{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Search domains & aliases</h2>
+  <div class="search-box">
+    <form method="get" action="/">
+      <input type="search" name="q" value="{{ q }}" placeholder="Search domain, description, address, or goto..." autofocus>
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+  </div>
+
+  {% if q %}
+    <h3>Domains ({{ domain_results|length }})</h3>
+    {% if domain_results %}
+    <table>
+      <thead>
+        <tr><th>Domain</th><th>Description</th><th>Active</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for d in domain_results %}
+        <tr>
+          <td><strong>{{ d.domain }}</strong></td>
+          <td>{{ d.description or "—" }}</td>
+          <td>{% if d.active %}<span class="badge badge-on">active</span>{% else %}<span class="badge badge-off">inactive</span>{% endif %}</td>
+          <td><a class="btn btn-secondary btn-sm" href="/domain/{{ d.domain }}/edit">Edit</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No matching domains.</p>
+    {% endif %}
+
+    <h3 style="margin-top:1.5rem;">Aliases ({{ alias_results|length }})</h3>
+    {% if alias_results %}
+    <table>
+      <thead>
+        <tr><th>Address</th><th>Goto</th><th>Domain</th><th>Active</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for a in alias_results %}
+        <tr>
+          <td><strong>{{ a.address }}</strong></td>
+          <td style="max-width:280px; word-break:break-all;">{{ a.goto }}</td>
+          <td>{{ a.domain }}</td>
+          <td>{% if a.active %}<span class="badge badge-on">active</span>{% else %}<span class="badge badge-off">inactive</span>{% endif %}</td>
+          <td><a class="btn btn-secondary btn-sm" href="/alias/{{ a.address }}/edit">Edit</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No matching aliases.</p>
+    {% endif %}
+  {% else %}
+    <p class="muted">Enter a search term to find domains or aliases.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{% if domain %}Edit domain{% else %}New domain{% endif %} — MIE Postfix{% endblock %}
+{% block content %}
+<div class="card" style="max-width:640px;">
+  <h2>{% if domain %}Edit domain: {{ domain.domain }}{% else %}New domain{% endif %}</h2>
+  <form method="post">
+    {% if not domain %}
+    <label>Domain</label>
+    <input type="text" name="domain" required placeholder="example.com" value="{{ domain.domain if domain else '' }}">
+    {% else %}
+    <input type="hidden" name="domain" value="{{ domain.domain }}">
+    <p><strong>{{ domain.domain }}</strong></p>
+    {% endif %}
+
+    <label>Description</label>
+    <input type="text" name="description" value="{{ domain.description if domain else '' }}">
+
+    <div class="row">
+      <div class="col">
+        <label>Aliases limit</label>
+        <input type="number" name="aliases" value="{{ domain.aliases if domain else 0 }}">
+      </div>
+      <div class="col">
+        <label>Mailboxes limit</label>
+        <input type="number" name="mailboxes" value="{{ domain.mailboxes if domain else 0 }}">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label>Max quota (bytes)</label>
+        <input type="number" name="maxquota" value="{{ domain.maxquota if domain else 0 }}">
+      </div>
+      <div class="col">
+        <label>Quota (bytes)</label>
+        <input type="number" name="quota" value="{{ domain.quota if domain else 0 }}">
+      </div>
+    </div>
+
+    <label>Transport</label>
+    <input type="text" name="transport" value="{{ domain.transport if domain else 'virtual' }}">
+
+    <label style="display:flex; align-items:center; gap:0.5rem; margin-top:1rem;">
+      <input type="checkbox" name="backupmx" {% if domain and domain.backupmx %}checked{% endif %}>
+      Backup MX
+    </label>
+
+    <label style="display:flex; align-items:center; gap:0.5rem;">
+      <input type="checkbox" name="active" {% if not domain or domain.active %}checked{% endif %}>
+      Active
+    </label>
+
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{% if domain %}Save{% else %}Create{% endif %}</button>
+      <a class="btn btn-secondary" href="/">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

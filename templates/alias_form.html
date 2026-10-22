@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{% if alias %}Edit alias{% else %}New alias{% endif %} — MIE Postfix{% endblock %}
+{% block content %}
+<div class="card" style="max-width:640px;">
+  <h2>{% if alias %}Edit alias: {{ alias.address }}{% else %}New alias{% endif %}</h2>
+  <form method="post">
+    {% if not alias %}
+    <label>Address</label>
+    <input type="text" name="address" required placeholder="user@example.com" value="{{ alias.address if alias else '' }}">
+    {% else %}
+    <input type="hidden" name="address" value="{{ alias.address }}">
+    <p><strong>{{ alias.address }}</strong></p>
+    {% endif %}
+
+    <label>Goto (comma-separated destinations)</label>
+    <textarea name="goto" rows="3" required>{{ alias.goto if alias else '' }}</textarea>
+
+    <label>Domain</label>
+    <select name="domain" required>
+      {% for d in domains %}
+      <option value="{{ d.domain }}" {% if alias and alias.domain == d.domain %}selected{% endif %}>{{ d.domain }}</option>
+      {% endfor %}
+    </select>
+
+    <label style="display:flex; align-items:center; gap:0.5rem; margin-top:1rem;">
+      <input type="checkbox" name="active" {% if not alias or alias.active %}checked{% endif %}>
+      Active
+    </label>
+
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{% if alias %}Save{% else %}Create{% endif %}</button>
+      <a class="btn btn-secondary" href="/">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

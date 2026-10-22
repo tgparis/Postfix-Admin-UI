@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}MIE Postfix{% endblock %}</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --border: #e1e4e8;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #0969da;
+      --accent-hover: #0550ae;
+      --danger: #d1242f;
+      --ok: #1a7f37;
+      --header: #1a1f24;
+      --nav-bg: #ffffff;
+      --th-bg: #f8f9fa;
+      --hover: #fafbfc;
+      --input-bg: #ffffff;
+    }
+    [data-theme="dark"] {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+      --danger: #f85149;
+      --ok: #3fb950;
+      --header: #010409;
+      --nav-bg: #161b22;
+      --th-bg: #21262d;
+      --hover: #21262d;
+      --input-bg: #0d1117;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--header);
+      color: #fff;
+      padding: 0.85rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    header a { color: #fff; text-decoration: none; font-weight: 600; font-size: 1.15rem; letter-spacing: -0.01em; }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-btn {
+      background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff;
+      border-radius: 6px; padding: 0.3rem 0.6rem; cursor: pointer; font-size: 0.85rem;
+    }
+    .theme-btn:hover { background: rgba(255,255,255,0.1); }
+    nav { background: var(--nav-bg); border-bottom: 1px solid var(--border); padding: 0 1rem; }
+    nav a {
+      display: inline-block; padding: 0.85rem 1.1rem; text-decoration: none; color: var(--muted);
+      font-weight: 500; font-size: 0.95rem; border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    nav a:hover { color: var(--text); }
+    nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+    main { max-width: 1120px; margin: 1.75rem auto; padding: 0 1.25rem; }
+    h1, h2 { margin: 0 0 1rem; font-weight: 600; letter-spacing: -0.02em; }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.25rem 1.4rem; margin-bottom: 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { text-align: left; padding: 0.6rem 0.65rem; border-bottom: 1px solid var(--border); }
+    th { background: var(--th-bg); font-weight: 600; color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--hover); }
+    .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+    .badge-on { background: #dafbe1; color: var(--ok); }
+    .badge-off { background: #ffebe9; color: var(--danger); }
+    [data-theme="dark"] .badge-on { background: #1a3d2a; color: #3fb950; }
+    [data-theme="dark"] .badge-off { background: #3d1a1a; color: #f85149; }
+    .btn {
+      display: inline-block; padding: 0.4rem 0.85rem; border-radius: 6px; text-decoration: none;
+      font-size: 0.875rem; font-weight: 500; border: 1px solid transparent; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: var(--card); border-color: var(--border); color: var(--text); }
+    .btn-secondary:hover { background: var(--hover); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { filter: brightness(1.1); }
+    .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.8rem; }
+    form.inline { display: inline; }
+    input[type=text], input[type=number], input[type=search], input[type=password], textarea, select {
+      width: 100%; padding: 0.5rem 0.65rem; border: 1px solid var(--border); border-radius: 6px;
+      font-size: 0.95rem; background: var(--input-bg); color: var(--text);
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(88,166,255,0.2);
+    }
+    label { display: block; margin: 0.85rem 0 0.3rem; font-weight: 500; font-size: 0.9rem; }
+    .row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .col { flex: 1; min-width: 180px; }
+    .actions { margin-top: 1.25rem; display: flex; gap: 0.6rem; }
+    .muted { color: var(--muted); font-size: 0.875rem; }
+    .pagination { margin-top: 1.25rem; display: flex; gap: 0.6rem; align-items: center; }
+    .search-box { margin-bottom: 1.5rem; }
+    .search-box form { display: flex; gap: 0.5rem; }
+    .search-box input { flex: 1; }
+    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/">MIE Postfix</a>
+    <div class="header-right">
+      <button class="theme-btn" id="themeToggle" type="button">Dark</button>
+      <span class="muted" style="color:#9ca3af; font-size:0.9rem;">
+        {{ user }} · <a href="/logout" style="color:#9ca3af; text-decoration:none;">Logout</a>
+      </span>
+    </div>
+  </header>
+  <nav>
+    <a href="/" class="{% if request.url.path == '/' %}active{% endif %}">Search</a>
+    <a href="/domains" class="{% if request.url.path.startswith('/domains') or request.url.path.startswith('/domain') %}active{% endif %}">Domains</a>
+    <a href="/aliases" class="{% if request.url.path.startswith('/aliases') or request.url.path.startswith('/alias') %}active{% endif %}">Aliases</a>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+        toggle.textContent = 'Light';
+      } else {
+        root.removeAttribute('data-theme');
+        toggle.textContent = 'Dark';
+      }
+      localStorage.setItem('theme', theme);
+    }
+    const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(saved);
+    toggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  </script>
+</body>
+</html>

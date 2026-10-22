@@ -1,0 +1,30 @@
+[Unit]
+Description=PostfixAdmin Lite
+After=network.target mariadb.service
+Wants=mariadb.service
+
+[Service]
+Type=simple
+User=postfixadmin
+Group=postfixadmin
+WorkingDirectory=/opt/postfixadmin-lite
+EnvironmentFile=/opt/postfixadmin-lite/.env
+ExecStart=/opt/postfixadmin-lite/venv/bin/python -m uvicorn main:app \
+  --host 0.0.0.0 \
+  --port 8443 \
+  --ssl-certfile ${SSL_CERTFILE} \
+  --ssl-keyfile ${SSL_KEYFILE} \
+  --proxy-headers \
+  --workers 2
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/postfixadmin-lite
+# Allow reading the certs (adjust paths if needed)
+ReadOnlyPaths=/etc/ssl /etc/letsencrypt /etc/pki
+
+[Install]
+WantedBy=multi-user.target
